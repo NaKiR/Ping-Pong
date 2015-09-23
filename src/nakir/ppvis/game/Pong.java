@@ -1,6 +1,7 @@
-package nakir.ppvis.game.gamestates;
+package nakir.ppvis.game;
 
-import nakir.ppvis.game.Model;
+import nakir.ppvis.game.gamestates.Menu;
+import nakir.ppvis.game.gamestates.Play;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;

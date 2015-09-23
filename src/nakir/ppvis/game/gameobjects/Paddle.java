@@ -1,9 +1,10 @@
-package nakir.ppvis.game;
+package nakir.ppvis.game.gameobjects;
 
+import nakir.ppvis.game.Model;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.RoundedRectangle;
 
-public class Paddle extends RoundedRectangle {
+public class Paddle extends RoundedRectangle implements GameObject{
     private int border = 30;
     private GameContainer gameContainer;
     private int keyUp;
@@ -22,11 +23,15 @@ public class Paddle extends RoundedRectangle {
 
     public void update() {
         if (gameContainer.getInput().isKeyDown(keyUp)) {
-            if (this.getMinY() > border)
-                this.setY(this.getY() - model.getPaddleSpeed());
+            if (getMinY() > border)
+                setY(getY() - model.getPaddleSpeed());
         } else if (gameContainer.getInput().isKeyDown(keyDown)) {
-            if (this.getMaxY() < frameHeight - border - 10)
-                this.setY(this.getY() + model.getPaddleSpeed());
+            if (getMaxY() < frameHeight - border - 10)
+                setY(getY() + model.getPaddleSpeed());
         }
+    }
+
+    public void toStart() {
+        setY(frameHeight / 2);
     }
 }

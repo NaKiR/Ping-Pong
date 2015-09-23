@@ -1,8 +1,8 @@
 package nakir.ppvis.game.gamestates;
 
-import nakir.ppvis.game.Ball;
+import nakir.ppvis.game.gameobjects.Ball;
 import nakir.ppvis.game.Model;
-import nakir.ppvis.game.Paddle;
+import nakir.ppvis.game.gameobjects.Paddle;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -58,7 +58,9 @@ public class Play extends BasicGameState {
             stateBasedGame.enterState(0);
         }
         if (gameContainer.getInput().isKeyPressed(Input.KEY_R)) {
-            ball.toStart(model.getBallSpeed());
+            ball.toStart();
+            paddlePlayer1.toStart();
+            paddlePlayer2.toStart();
             model.setScorePlayer1(0);
             model.setScorePlayer2(0);
         }
@@ -68,7 +70,7 @@ public class Play extends BasicGameState {
         paddlePlayer1.update();
         paddlePlayer2.update();
         if (!ball.isStoped()) {
-            ball.nextPos();
+            ball.update();
         } else {
             if (gameContainer.getInput().isKeyPressed(Input.KEY_F1)) {
                 model.setBallSpeed(model.getBallSpeed() - 1);
@@ -85,12 +87,12 @@ public class Play extends BasicGameState {
         }
         if (ball.getMinX() <= 0) {
             ball.reverseX();
-            ball.toStart(-5);
+            ball.toStart();
             model.setScorePlayer1(model.getScorePlayer1() + 1);
         }
         if (ball.getMaxX() >= width) {
             ball.reverseX();
-            ball.toStart(5);
+            ball.toStart();
             model.setScorePlayer2(model.getScorePlayer2() + 1);
         }
         if (ball.intersects(paddlePlayer1)) {

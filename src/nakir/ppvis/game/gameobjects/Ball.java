@@ -1,9 +1,10 @@
-package nakir.ppvis.game;
+package nakir.ppvis.game.gameobjects;
 
+import nakir.ppvis.game.Model;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Vector2f;
 
-public class Ball extends Circle {
+public class Ball extends Circle implements GameObject{
     private Boolean isStoped = true;
     private Vector2f ballVelocity;
     private int border = 30;
@@ -27,7 +28,7 @@ public class Ball extends Circle {
         return isStoped;
     }
 
-    public void nextPos() {
+    public void update() {
         if (this.getMinY() <= border)
             ballVelocity.y = -ballVelocity.getY();
         if (this.getMaxY() >= height - border)
@@ -35,10 +36,10 @@ public class Ball extends Circle {
         this.setLocation(this.getX() + ballVelocity.getX(), this.getY() + ballVelocity.getY());
     }
 
-    public void toStart(int speed) {
+    public void toStart() {
         this.setX(width / 2 - 6);
         this.setY(height / 2 - 6);
-        ballVelocity.x = speed;
+        ballVelocity.x = model.getBallSpeed();
         ballVelocity.y = 0;
         this.setStoped(true);
     }
