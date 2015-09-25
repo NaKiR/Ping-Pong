@@ -32,6 +32,6 @@ public class Paddle extends RoundedRectangle implements GameObject{
     }
 
     public void toStart() {
-        setY(frameHeight / 2);
+        setY(frameHeight / 2 - 40);
     }
 }

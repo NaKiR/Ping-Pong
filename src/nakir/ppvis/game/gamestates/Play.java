@@ -32,8 +32,8 @@ public class Play extends BasicGameState {
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         gameContainer.getInput().enableKeyRepeat();
-        paddlePlayer1 = new Paddle(5, height/2, 10, 80, 3, gameContainer, Input.KEY_W, Input.KEY_S, height, model);
-        paddlePlayer2 = new Paddle(width - 15, height/2, 10, 80, 3, gameContainer, Input.KEY_UP, Input.KEY_DOWN, height, model);
+        paddlePlayer1 = new Paddle(5, height/2 - 40, 10, 80, 0, gameContainer, Input.KEY_W, Input.KEY_S, height, model);
+        paddlePlayer2 = new Paddle(width - 15, height/2 - 40, 10, 80, 0, gameContainer, Input.KEY_UP, Input.KEY_DOWN, height, model);
         ball = new Ball(width/2, height/2, 6, width, height, model);
         background = new Image("res/background.png");
     }
@@ -96,10 +96,10 @@ public class Play extends BasicGameState {
             model.setScorePlayer2(model.getScorePlayer2() + 1);
         }
         if (ball.intersects(paddlePlayer1)) {
-            ball.intersect(paddlePlayer1.getCenterY());
+            ball.intersect(paddlePlayer1.getY());
         }
         if (ball.intersects(paddlePlayer2)) {
-            ball.intersect(paddlePlayer2.getCenterY());
+            ball.intersect(paddlePlayer2.getY());
         }
     }
 }
