@@ -29,10 +29,19 @@ public class Ball extends Circle implements GameObject{
     }
 
     public void update() {
-        if (this.getMinY() <= border)
+        if (getMinY() <= border)
             ballVelocity.y = -ballVelocity.getY();
-        if (this.getMaxY() >= height - border)
+        if (getMaxY() >= height - border)
             ballVelocity.y = -ballVelocity.getY();
+        if (getMinX() <= 0) {
+            toStart();
+            reverseX();
+            model.setScorePlayer1(model.getScorePlayer1() + 1);
+        }
+        if (getMaxX() >= width) {
+            toStart();
+            model.setScorePlayer2(model.getScorePlayer2() + 1);
+        }
         this.setLocation(this.getX() + ballVelocity.getX(), this.getY() + ballVelocity.getY());
     }
 
@@ -54,10 +63,9 @@ public class Ball extends Circle implements GameObject{
         }
         ballVelocity.y = (this.getCenterY() - paddlePos - 40) * model.getBallSpeed() / 50;
         if (ballVelocity.x < 0) {
-            ballVelocity.x = model.getBallSpeed() - Math.abs(ballVelocity.y);
+            ballVelocity.x = (float) Math.sqrt(Math.pow(model.getBallSpeed(), 2) - Math.pow(ballVelocity.y, 2));
         } else {
-            ballVelocity.x = Math.abs(ballVelocity.y ) - model.getBallSpeed();
+            ballVelocity.x = - (float) Math.sqrt(Math.pow(model.getBallSpeed(), 2) - Math.pow(ballVelocity.y, 2));
         }
-        System.out.println(ballVelocity.x + " " + ballVelocity.y);
     }
 }
