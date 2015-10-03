@@ -2,6 +2,9 @@ package nakir.ppvis.game;
 
 import nakir.ppvis.game.gamestates.Menu;
 import nakir.ppvis.game.gamestates.Play;
+import nakir.ppvis.game.model.BallModel;
+import nakir.ppvis.game.model.Model;
+import nakir.ppvis.game.model.PaddleModel;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -15,11 +18,13 @@ public class Pong extends StateBasedGame {
     private static final int height = 480;
     private static final Boolean isFullscreen = false;
     private Model model = new Model();
+    private BallModel ballModel = new BallModel();
+    private PaddleModel paddleModel = new PaddleModel();
 
     Pong(String gameName) {
         super(gameName);
         addState(new Menu(width, height));
-        addState(new Play(width, height, model));
+        addState(new Play(width, height, model, ballModel, paddleModel));
     }
 
     public static void main(String[] args) {

@@ -1,23 +1,25 @@
 package nakir.ppvis.game.gameobjects;
 
-import nakir.ppvis.game.Model;
+import nakir.ppvis.game.model.BallModel;
+import nakir.ppvis.game.Field;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Vector2f;
 
-public class Ball extends Circle implements GameObject{
+public class Ball extends Circle implements GameObject {
     private Boolean isStoped = true;
     private Vector2f ballVelocity;
-    private int border = 30;
     private int height;
     private int width;
-    private Model model;
+    private BallModel model;
+    private Field field;
 
-    public Ball(float centerPointX, float centerPointY, float radius, int width, int height, Model model) {
-        super(centerPointX, centerPointY, radius);
+    public Ball(int width, int height, BallModel model, Field field) {
+        super(width/2, height/2, 6);
         ballVelocity = new Vector2f(model.getBallSpeed(), 0);
         this.width = width;
         this.height = height;
         this.model = model;
+        this.field = field;
     }
 
     public void setStoped(Boolean isStoped) {
@@ -29,19 +31,7 @@ public class Ball extends Circle implements GameObject{
     }
 
     public void update() {
-        if (getMinY() <= border)
-            ballVelocity.y = -ballVelocity.getY();
-        if (getMaxY() >= height - border)
-            ballVelocity.y = -ballVelocity.getY();
-        if (getMinX() <= 0) {
-            toStart();
-            reverseX();
-            model.setScorePlayer1(model.getScorePlayer1() + 1);
-        }
-        if (getMaxX() >= width) {
-            toStart();
-            model.setScorePlayer2(model.getScorePlayer2() + 1);
-        }
+        field.checkBallPosition(this);
         this.setLocation(this.getX() + ballVelocity.getX(), this.getY() + ballVelocity.getY());
     }
 
@@ -53,9 +43,14 @@ public class Ball extends Circle implements GameObject{
         this.setStoped(true);
     }
 
-    public void reverseX() {
+    public void reverseSpeedX() {
         ballVelocity.x = - ballVelocity.x;
     }
+
+    public void reverseSpeedY() {
+        ballVelocity.y = - ballVelocity.y;
+    }
+
 
     public void intersect(float paddlePos) {
         if (Math.abs(this.getCenterY() - paddlePos - 40) > 40) {

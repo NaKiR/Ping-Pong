@@ -1,7 +1,10 @@
 package nakir.ppvis.game.gamestates;
 
+import nakir.ppvis.game.model.BallModel;
+import nakir.ppvis.game.Field;
+import nakir.ppvis.game.model.PaddleModel;
 import nakir.ppvis.game.gameobjects.Ball;
-import nakir.ppvis.game.Model;
+import nakir.ppvis.game.model.Model;
 import nakir.ppvis.game.gameobjects.Paddle;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
@@ -17,11 +20,16 @@ public class Play extends BasicGameState {
     private Paddle paddlePlayer2;
     private Image background;
     private Model model;
+    private BallModel ballModel;
+    private PaddleModel paddleModel;
+    private Field field;
 
-    public Play(int width, int height, Model model) {
+    public Play(int width, int height, Model model, BallModel ballModel, PaddleModel paddleModel) {
         this.model = model;
         this.height = height;
         this.width = width;
+        this.ballModel = ballModel;
+        this.paddleModel = paddleModel;
     }
 
     @Override
@@ -32,9 +40,10 @@ public class Play extends BasicGameState {
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         gameContainer.getInput().enableKeyRepeat();
-        paddlePlayer1 = new Paddle(5, height/2 - 40, 10, 80, 3, gameContainer, Input.KEY_W, Input.KEY_S, height, model);
-        paddlePlayer2 = new Paddle(width - 15, height/2 - 40, 10, 80, 3, gameContainer, Input.KEY_UP, Input.KEY_DOWN, height, model);
-        ball = new Ball(width/2, height/2, 6, width, height, model);
+        field = new Field(width, height, model);
+        paddlePlayer1 = new Paddle(5, height/2 - 40, 10, 80, 3, gameContainer, Input.KEY_W, Input.KEY_S, height, paddleModel, field);
+        paddlePlayer2 = new Paddle(width - 15, height/2 - 40, 10, 80, 3, gameContainer, Input.KEY_UP, Input.KEY_DOWN, height, paddleModel, field);
+        ball = new Ball(width, height, ballModel, field);
         background = new Image("res/background.png");
     }
 
@@ -47,8 +56,8 @@ public class Play extends BasicGameState {
         g.fill(ball);
         g.drawString(model.getScorePlayer2().toString(), 150, 10);
         g.drawString(model.getScorePlayer1().toString(), width - 150, 10);
-        g.drawString("Ball speed: " + model.getBallSpeed().toString(), 250, 0);
-        g.drawString("Paddle speed: " + model.getPaddleSpeed().toString(), 250, 13);
+        g.drawString("Ball speed: " + ballModel.getBallSpeed().toString(), 250, 0);
+        g.drawString("Paddle speed: " + paddleModel.getPaddleSpeed().toString(), 250, 13);
 
     }
 
@@ -73,16 +82,16 @@ public class Play extends BasicGameState {
             ball.update();
         } else {
             if (gameContainer.getInput().isKeyPressed(Input.KEY_F1)) {
-                model.setBallSpeed(model.getBallSpeed() - 1);
+                ballModel.setBallSpeed(ballModel.getBallSpeed() - 1);
             }
             if (gameContainer.getInput().isKeyPressed(Input.KEY_F2)) {
-                model.setBallSpeed(model.getBallSpeed() + 1);
+                ballModel.setBallSpeed(ballModel.getBallSpeed() + 1);
             }
             if (gameContainer.getInput().isKeyPressed(Input.KEY_F3)) {
-                model.setPaddleSpeed(model.getPaddleSpeed() - 1);
+                paddleModel.setPaddleSpeed(paddleModel.getPaddleSpeed() - 1);
             }
             if (gameContainer.getInput().isKeyPressed(Input.KEY_F4)) {
-                model.setPaddleSpeed(model.getPaddleSpeed() + 1);
+                paddleModel.setPaddleSpeed(paddleModel.getPaddleSpeed() + 1);
             }
         }
         if (ball.intersects(paddlePlayer1)) {
