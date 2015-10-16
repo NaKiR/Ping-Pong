@@ -41,8 +41,8 @@ public class Play extends BasicGameState {
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         gameContainer.getInput().enableKeyRepeat();
         field = new Field(width, height, model);
-        paddlePlayer1 = new Paddle(5, height/2 - 40, 10, 80, 3, gameContainer, Input.KEY_W, Input.KEY_S, height, paddleModel, field);
-        paddlePlayer2 = new Paddle(width - 15, height/2 - 40, 10, 80, 3, gameContainer, Input.KEY_UP, Input.KEY_DOWN, height, paddleModel, field);
+        paddlePlayer1 = new Paddle(5, height/2 - 40, gameContainer, Input.KEY_W, Input.KEY_S, height, paddleModel, field);
+        paddlePlayer2 = new Paddle(width - 15, height/2 - 40, gameContainer, Input.KEY_UP, Input.KEY_DOWN, height, paddleModel, field);
         ball = new Ball(width, height, ballModel, field);
         background = new Image("res/background.png");
     }
@@ -54,10 +54,18 @@ public class Play extends BasicGameState {
         g.fill(paddlePlayer1);
         g.fill(paddlePlayer2);
         g.fill(ball);
-        g.drawString(model.getScorePlayer2().toString(), 150, 10);
-        g.drawString(model.getScorePlayer1().toString(), width - 150, 10);
+        g.drawString("Player2: " + model.getScorePlayer2().toString(), 50, 10);
+        g.drawString("Player1: " + model.getScorePlayer1().toString(), width - 50 - g.getFont().getWidth("Player1: "
+                + model.getScorePlayer1().toString()), 10);
         g.drawString("Ball speed: " + ballModel.getBallSpeed().toString(), 250, 0);
         g.drawString("Paddle speed: " + paddleModel.getPaddleSpeed().toString(), 250, 13);
+        if (model.checkWinner()) {
+            String tmp = model.getWinnerName() + " win!";
+            g.getFont().getWidth(tmp);
+            g.drawString(model.getWinnerName() + " win!", width / 2 - g.getFont().getWidth(tmp) / 2, 100);
+            g.drawString("R - retart", width/2 - g.getFont().getWidth("R - retart")/2, 120);
+            g.drawString("Esc - menu", width/2 - g.getFont().getWidth("Esc - menu")/2, 140);
+        }
 
     }
 
@@ -65,40 +73,48 @@ public class Play extends BasicGameState {
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
         if (gameContainer.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
             stateBasedGame.enterState(0);
+            restart();
         }
         if (gameContainer.getInput().isKeyPressed(Input.KEY_R)) {
-            ball.toStart();
-            paddlePlayer1.toStart();
-            paddlePlayer2.toStart();
-            model.setScorePlayer1(0);
-            model.setScorePlayer2(0);
+            restart();
         }
-        if (gameContainer.getInput().isKeyPressed(Input.KEY_SPACE)) {
-            ball.setStoped(false);
-        }
-        paddlePlayer1.update();
-        paddlePlayer2.update();
-        if (!ball.isStoped()) {
-            ball.update();
-        } else {
-            if (gameContainer.getInput().isKeyPressed(Input.KEY_F1)) {
-                ballModel.setBallSpeed(ballModel.getBallSpeed() - 1);
+
+        if (!model.checkWinner()) {
+            if (gameContainer.getInput().isKeyPressed(Input.KEY_SPACE)) {
+                ball.setStoped(false);
             }
-            if (gameContainer.getInput().isKeyPressed(Input.KEY_F2)) {
-                ballModel.setBallSpeed(ballModel.getBallSpeed() + 1);
+            paddlePlayer1.update();
+            paddlePlayer2.update();
+            if (!ball.isStoped()) {
+                ball.update();
+            } else {
+                if (gameContainer.getInput().isKeyPressed(Input.KEY_F1)) {
+                    ballModel.setBallSpeed(ballModel.getBallSpeed() - 1);
+                }
+                if (gameContainer.getInput().isKeyPressed(Input.KEY_F2)) {
+                    ballModel.setBallSpeed(ballModel.getBallSpeed() + 1);
+                }
+                if (gameContainer.getInput().isKeyPressed(Input.KEY_F3)) {
+                    paddleModel.setPaddleSpeed(paddleModel.getPaddleSpeed() - 1);
+                }
+                if (gameContainer.getInput().isKeyPressed(Input.KEY_F4)) {
+                    paddleModel.setPaddleSpeed(paddleModel.getPaddleSpeed() + 1);
+                }
             }
-            if (gameContainer.getInput().isKeyPressed(Input.KEY_F3)) {
-                paddleModel.setPaddleSpeed(paddleModel.getPaddleSpeed() - 1);
+            if (ball.intersects(paddlePlayer1)) {
+                ball.intersect(paddlePlayer1.getY());
             }
-            if (gameContainer.getInput().isKeyPressed(Input.KEY_F4)) {
-                paddleModel.setPaddleSpeed(paddleModel.getPaddleSpeed() + 1);
+            if (ball.intersects(paddlePlayer2)) {
+                ball.intersect(paddlePlayer2.getY());
             }
         }
-        if (ball.intersects(paddlePlayer1)) {
-            ball.intersect(paddlePlayer1.getY());
-        }
-        if (ball.intersects(paddlePlayer2)) {
-            ball.intersect(paddlePlayer2.getY());
-        }
+    }
+
+    public void restart() {
+        ball.toStart();
+        paddlePlayer1.toStart();
+        paddlePlayer2.toStart();
+        model.setScorePlayer1(0);
+        model.setScorePlayer2(0);
     }
 }

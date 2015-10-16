@@ -30,4 +30,20 @@ public class Field {
             model.setScorePlayer2(model.getScorePlayer2() + 1);
         }
     }
+
+    public Boolean checkUpperPaddlePosition(Paddle paddle) {
+        if (paddle.getMinY() > upperBorder) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Boolean checkBottomPaddlePosition(Paddle paddle) {
+        if (paddle.getMaxY() < height - bottomBorder) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

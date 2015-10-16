@@ -6,7 +6,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.RoundedRectangle;
 
 public class Paddle extends RoundedRectangle implements GameObject {
-    private int border = 30;
     private GameContainer gameContainer;
     private int keyUp;
     private int keyDown;
@@ -14,8 +13,9 @@ public class Paddle extends RoundedRectangle implements GameObject {
     private PaddleModel model;
     private Field field;
 
-    public Paddle(float x, float y, float width, float height, float cornerRadius, GameContainer gameContainer, int keyUp, int keyDown, int frameHeight, PaddleModel model, Field field) {
-        super(x, y, width, height, cornerRadius);
+    public Paddle(float x, float y,GameContainer gameContainer, int keyUp, int keyDown, int frameHeight,
+                  PaddleModel model, Field field) {
+        super(x, y, 10, 80, 3);
         this.gameContainer = gameContainer;
         this.keyUp = keyUp;
         this.keyDown = keyDown;
@@ -26,10 +26,10 @@ public class Paddle extends RoundedRectangle implements GameObject {
 
     public void update() {
         if (gameContainer.getInput().isKeyDown(keyUp)) {
-            if (getMinY() > border)
+            if (field.checkUpperPaddlePosition(this))
                 setY(getY() - model.getPaddleSpeed());
         } else if (gameContainer.getInput().isKeyDown(keyDown)) {
-            if (getMaxY() < frameHeight - border - 10)
+            if (field.checkBottomPaddlePosition(this))
                 setY(getY() + model.getPaddleSpeed());
         }
     }
