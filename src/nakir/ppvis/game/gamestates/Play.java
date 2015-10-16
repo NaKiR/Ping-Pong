@@ -1,11 +1,13 @@
 package nakir.ppvis.game.gamestates;
 
+import nakir.ppvis.game.gameobjects.AIPaddle;
+import nakir.ppvis.game.gameobjects.Paddle;
+import nakir.ppvis.game.gameobjects.PlayerPaddle;
 import nakir.ppvis.game.model.BallModel;
 import nakir.ppvis.game.Field;
 import nakir.ppvis.game.model.PaddleModel;
 import nakir.ppvis.game.gameobjects.Ball;
 import nakir.ppvis.game.model.Model;
-import nakir.ppvis.game.gameobjects.Paddle;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -17,7 +19,9 @@ public class Play extends BasicGameState {
     private int height;
     private Ball ball;
     private Paddle paddlePlayer1;
-    private Paddle paddlePlayer2;
+    private Paddle paddlePlayer2 = new Paddle();;
+    private Paddle plPaddle;
+    private Paddle AIPaddle;
     private Image background;
     private Model model;
     private BallModel ballModel;
@@ -41,9 +45,10 @@ public class Play extends BasicGameState {
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         gameContainer.getInput().enableKeyRepeat();
         field = new Field(width, height, model);
-        paddlePlayer1 = new Paddle(5, height/2 - 40, gameContainer, Input.KEY_W, Input.KEY_S, height, paddleModel, field);
-        paddlePlayer2 = new Paddle(width - 15, height/2 - 40, gameContainer, Input.KEY_UP, Input.KEY_DOWN, height, paddleModel, field);
         ball = new Ball(width, height, ballModel, field);
+        paddlePlayer1 = new PlayerPaddle(5, height/2 - 40, gameContainer, Input.KEY_W, Input.KEY_S, paddleModel, field);
+        plPaddle = new PlayerPaddle(width - 15, height / 2 - 40, gameContainer, Input.KEY_UP, Input.KEY_DOWN, paddleModel, field);
+        AIPaddle = new AIPaddle(width - 15, height / 2 - 40, paddleModel, field, ball);
         background = new Image("res/background.png");
     }
 
@@ -51,6 +56,11 @@ public class Play extends BasicGameState {
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics g) throws SlickException {
         gameContainer.setShowFPS(false);
         g.drawImage(background, 0, 0);
+        if (model.getIsPvP()) {
+            paddlePlayer2 = plPaddle;
+        } else {
+            paddlePlayer2 = AIPaddle;
+        }
         g.fill(paddlePlayer1);
         g.fill(paddlePlayer2);
         g.fill(ball);

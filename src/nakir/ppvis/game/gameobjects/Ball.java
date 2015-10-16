@@ -53,7 +53,7 @@ public class Ball extends Circle implements GameObject {
 
 
     public void intersect(float paddlePos) {
-        if (Math.abs(this.getCenterY() - paddlePos - 40) > 40) {
+        if (Math.abs(this.getCenterY() - paddlePos - 40) > 45) {
             return;
         }
         ballVelocity.y = (this.getCenterY() - paddlePos - 40) * model.getBallSpeed() / 50;

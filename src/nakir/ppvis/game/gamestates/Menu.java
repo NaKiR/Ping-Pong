@@ -1,5 +1,6 @@
 package nakir.ppvis.game.gamestates;
 
+import nakir.ppvis.game.model.Model;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
@@ -16,15 +17,20 @@ public class Menu extends BasicGameState {
     private Rectangle background;
     private Rectangle menuBar;
     private Image exitButton;
-    private Image playButton;
+    private Image onePlayerButton;
+    private Image twoPlayersButton;
     private Image exitButtonFocus;
-    private Image playButtonFocus;
-    private Boolean isFocusedPlay = false;
+    private Image onePlayerButtonFocus;
+    private Image twoPlayersButtonFocus;
+    private Model model;
+    private Boolean isFocused1Player = false;
+    private Boolean isFocused2Players = false;
     private Boolean isFocusedExit = false;
 
-    public Menu(int width, int height) {
+    public Menu(int width, int height, Model model) {
         this.height = height;
         this.width = width;
+        this.model = model;
     }
 
     @Override
@@ -37,9 +43,11 @@ public class Menu extends BasicGameState {
         gameContainer.setShowFPS(false);
         background = new Rectangle(0, 0, width, height);
         menuBar = new Rectangle(width / 10, 0, 200, height);
-        playButton = new Image("res/play.png");
+        onePlayerButton = new Image("res/1Player.png");
+        twoPlayersButton = new Image("res/2Players.png");
         exitButton = new Image("res/exit.png");
-        playButtonFocus = new Image("res/playP.png");
+        onePlayerButtonFocus = new Image("res/1playerP.png");
+        twoPlayersButtonFocus = new Image("res/2playersP.png");
         exitButtonFocus = new Image("res/exitP.png");
     }
 
@@ -52,15 +60,20 @@ public class Menu extends BasicGameState {
         g.setColor(Color.white);
         String gameName = "Ping-Pong!";
         g.drawString(gameName, width / 10 + 10, 50);
-        if (isFocusedPlay) {
-            g.drawImage(playButtonFocus, width / 10, 100);
+        if (isFocused1Player) {
+            g.drawImage(onePlayerButtonFocus, width / 10, 100);
         } else {
-            g.drawImage(playButton, width / 10, 100);
+            g.drawImage(onePlayerButton, width / 10, 100);
+        }
+        if (isFocused2Players) {
+            g.drawImage(twoPlayersButtonFocus, width / 10, 150);
+        } else {
+            g.drawImage(twoPlayersButton, width / 10, 150);
         }
         if (isFocusedExit) {
-            g.drawImage(exitButtonFocus, width / 10, 150);
+            g.drawImage(exitButtonFocus, width / 10, 200);
         } else {
-            g.drawImage(exitButton, width / 10, 150);
+            g.drawImage(exitButton, width / 10, 200);
         }
     }
 
@@ -70,14 +83,24 @@ public class Menu extends BasicGameState {
         int posY = Mouse.getY();
 
         if ((posX > width / 10 && posX < width / 10 + 200) && (posY < height - 100 && posY > height - 150)) {
-            isFocusedPlay = true;
+            isFocused1Player = true;
             if (Mouse.isButtonDown(0)) {
+                model.setIsPvP(false);
                 stateBasedGame.enterState(1);
             }
         } else {
-            isFocusedPlay = false;
+            isFocused1Player = false;
         }
         if ((posX > width / 10 && posX < width / 10 + 200) && (posY < height - 150 && posY > height - 200)) {
+            isFocused2Players = true;
+            if (Mouse.isButtonDown(0)) {
+                model.setIsPvP(true);
+                stateBasedGame.enterState(1);
+            }
+        } else {
+            isFocused2Players = false;
+        }
+        if ((posX > width / 10 && posX < width / 10 + 200) && (posY < height - 200 && posY > height - 250)) {
             isFocusedExit = true;
             if (Mouse.isButtonDown(0)) {
                 System.exit(0);

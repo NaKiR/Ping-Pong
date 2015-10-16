@@ -6,7 +6,7 @@ public class PaddleModel {
     private Integer minPaddleSpeed = 3;
 
     public PaddleModel() {
-        paddleSpeed = 10;
+        paddleSpeed = 5;
     }
 
     public Integer getPaddleSpeed() {

@@ -5,6 +5,7 @@ public class Model {
     private Integer scorePlayer2;
     private int frameWidth = 640;
     private int frameHeight = 480;
+    private Boolean isPvP = true;
 
     public Model() {
         scorePlayer1 = 0;
@@ -25,6 +26,14 @@ public class Model {
 
     public void setScorePlayer2(int scorePlayer) {
         scorePlayer2 = scorePlayer;
+    }
+
+    public void setIsPvP(Boolean isPvP) {
+        this.isPvP = isPvP;
+    }
+
+    public Boolean getIsPvP() {
+        return isPvP;
     }
 
     public Boolean checkWinner() {

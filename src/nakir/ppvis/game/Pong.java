@@ -23,7 +23,7 @@ public class Pong extends StateBasedGame {
 
     Pong(String gameName) {
         super(gameName);
-        addState(new Menu(width, height));
+        addState(new Menu(width, height, model));
         addState(new Play(width, height, model, ballModel, paddleModel));
     }
 

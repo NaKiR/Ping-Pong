@@ -1,12 +1,13 @@
 package nakir.ppvis.game;
 
 import nakir.ppvis.game.gameobjects.Ball;
-import nakir.ppvis.game.gameobjects.Paddle;
+import nakir.ppvis.game.gameobjects.PlayerPaddle;
 import nakir.ppvis.game.model.Model;
+import org.newdawn.slick.geom.RoundedRectangle;
 
 public class Field {
-    private int upperBorder = 30;
-    private int bottomBorder = 40;
+    private int upperBorder = 35;
+    private int bottomBorder = 35;
     private int height;
     private int width;
     private Model model;
@@ -31,7 +32,7 @@ public class Field {
         }
     }
 
-    public Boolean checkUpperPaddlePosition(Paddle paddle) {
+    public Boolean checkUpperPaddlePosition(RoundedRectangle paddle) {
         if (paddle.getMinY() > upperBorder) {
             return true;
         } else {
@@ -39,7 +40,11 @@ public class Field {
         }
     }
 
-    public Boolean checkBottomPaddlePosition(Paddle paddle) {
+    public int getHeight() {
+        return height;
+    }
+
+    public Boolean checkBottomPaddlePosition(RoundedRectangle paddle) {
         if (paddle.getMaxY() < height - bottomBorder) {
             return true;
         } else {

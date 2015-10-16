@@ -6,7 +6,7 @@ public class BallModel {
     private Integer minBallSpeed = 1;
 
     public BallModel() {
-        ballSpeed = 5;
+        ballSpeed = 10;
     }
 
     public Integer getBallSpeed() {
